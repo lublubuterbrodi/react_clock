@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as React from 'react';
 
 type Props = {
@@ -23,12 +24,10 @@ export class Clock extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevState.today !== this.state.today) {
-      // eslint-disable-next-line no-console
       console.log(this.state.today.toUTCString().slice(-12, -4));
     }
 
     if (prevProps.clockName !== this.props.clockName) {
-      // eslint-disable-next-line no-console
       console.warn(
         `Renamed from ${prevProps.clockName} to ${this.props.clockName}`,
       );
@@ -38,6 +37,7 @@ export class Clock extends React.Component<Props, State> {
   componentWillUnmount() {
     if (this.timerId) {
       clearInterval(this.timerId);
+      this.timerId = 0;
     }
   }
 

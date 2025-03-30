@@ -10,45 +10,41 @@ function getRandomName(): string {
 
 type State = {
   clockName: string;
-  isClock: boolean;
+  isClockVisible: boolean;
 };
 
 export class App extends React.Component<{}, State> {
   state: State = {
     clockName: 'Clock-0',
-    isClock: true,
+    isClockVisible: true,
   };
 
   timerId: number | undefined;
 
-  handleRightMouseClick = () => {
-    this.setState(currentState => ({
-      ...currentState,
-      isClock: false,
-    }));
+  handleRightClick = () => {
+    this.setState({ isClockVisible: false });
   };
 
-  handleLeftMouseClick = () => {
-    this.setState(currentState => ({
-      ...currentState,
-      isClock: true,
-    }));
+  handleLeftClick = () => {
+    this.setState({ isClockVisible: true });
   };
 
   componentDidMount() {
     this.timerId = window.setInterval(() => {
       this.setState({ clockName: getRandomName() });
     }, 3300);
-    document.addEventListener('contextmenu', this.handleRightMouseClick);
-    document.addEventListener('click', this.handleLeftMouseClick);
+
+    document.addEventListener('contextmenu', this.handleRightClick);
+    document.addEventListener('click', this.handleLeftClick);
   }
 
   componentWillUnmount() {
     if (this.timerId) {
       clearInterval(this.timerId);
-      document.removeEventListener('contextmenu', this.handleRightMouseClick);
-      document.removeEventListener('click', this.handleLeftMouseClick);
     }
+
+    document.removeEventListener('contextmenu', this.handleRightClick);
+    document.removeEventListener('click', this.handleLeftClick);
   }
 
   render() {
@@ -56,7 +52,7 @@ export class App extends React.Component<{}, State> {
       'div',
       { className: 'App' },
       React.createElement('h1', null, 'React clock'),
-      this.state.isClock &&
+      this.state.isClockVisible &&
         React.createElement(Clock, { clockName: this.state.clockName }),
     );
   }
